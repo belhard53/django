@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse 
 from django.core.validators import (
     MinValueValidator, 
     MaxValueValidator)
@@ -22,15 +23,22 @@ class Person(models.Model):
         default=0,
         validators=[MinValueValidator(12), MaxValueValidator(99)],
         verbose_name = 'Возраст'
-    )
+    ) 
     course = models.ManyToManyField(
             'Course', 
             blank=True,
             verbose_name = 'Посещаемые курсы')  
     
+    photo = models.ImageField(
+            upload_to='photos/%Y/%m/%d', 
+            blank=True,
+            verbose_name="ФОто")
 
     def __str__(self) -> str:
         return f'{self.last_name} {self.first_name} {self.age}'
+
+    def get_absolute_url(self):
+        return reverse('person', kwargs={'id': self.pk})
 
     class Meta:
         indexes= [models.Index(fields=['first_name'])]
@@ -60,10 +68,12 @@ class Course(models.Model):
     course_num = models.SmallIntegerField(
             default=0,
             verbose_name = 'Номер курса')
-  
+   
     start_date = models.DateField(verbose_name = 'Начало курса', null=True)
     end_date = models.DateField(verbose_name = 'Окончание курса', null=True)
-    
+    description = models.TextField(blank=True, verbose_name = 'Описание')
+
+
     def __str__(self) -> str:
         return f'{self.get_name_display()}-{self.course_num}'
 

@@ -16,9 +16,37 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from scool import views
+from scool.views import *
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('', index, name='index',),
+
+    path('persons/', persons, name='persons', kwargs={'id':0}),
+    path('persons/<int:id>/', persons, name='person',),
+    path('persons/add/', PersonAdd.as_view(), name='addperson',),
+    path('persons/edit/<int:id>/', index, name='editperson',),
+
+    # если нужен кеш
+    #path('courses/', cache_page(60*15)(Courses.as_view()), name='courses',),
+    path('courses/', Courses.as_view(), name='courses',),
+    
+    path('courses/<int:id>/', Show_course.as_view(), name='course',),
+    path('courses/add/', course_add_view, name='addcourse',),
+    path('courses/edit/<int:id>/', course_edit_view, name='editcourse',),
+
+    path('reg/', RegisterUser.as_view(), name='reg',),
+    path('login/', LoginUser.as_view(), name='login',),
+    path('logout/', logout_user, name='logout',),
+
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [ 
+        path("__debug__/", include("debug_toolbar.urls")), ] + urlpatterns
+    
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

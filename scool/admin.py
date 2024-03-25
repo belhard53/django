@@ -12,9 +12,9 @@ class PersonAdmin(admin.ModelAdmin):
     # добавить поиск по полямм 
     search_fields = ('last_name__startswith',)
     # search_fields = ('last_name',)
-
+ 
     # добавить фильтр
-    list_filter = ('first_name',)
+    list_filter = ('first_name',) 
 
     # вычисление среднего бала
     def average_grade1(self, obj):

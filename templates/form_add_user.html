@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавить курс {% endblock %}
+
+{% block content1_head %}
+    <h2>Добавить курс</h2>
+{% endblock %}
+
+{% block content1 %}
+    <form 
+        class="persons_forms" 
+        action="{% url 'addperson' %}" 
+        method="post" 
+        enctype="multipart/form-data" 
+        >
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="submit">
+
+
+    </form>
+
+    
+
+{% endblock %}
