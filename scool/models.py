@@ -1,8 +1,10 @@
 from django.db import models
 from django.urls import reverse 
 from django.core.validators import (
-    MinValueValidator, 
-    MaxValueValidator)
+                                MinValueValidator, 
+                                MaxValueValidator
+                                )
+from django.contrib.auth.models import User
 
 class Person(models.Model):
     last_name = models.CharField(
@@ -72,7 +74,7 @@ class Course(models.Model):
     start_date = models.DateField(verbose_name = 'Начало курса', null=True)
     end_date = models.DateField(verbose_name = 'Окончание курса', null=True)
     description = models.TextField(blank=True, verbose_name = 'Описание')
-
+    user  = models.ForeignKey(User, verbose_name = 'Пользователь', on_delete = models.CASCADE)
 
     def __str__(self) -> str:
         return f'{self.get_name_display()}-{self.course_num}'
